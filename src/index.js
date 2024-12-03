@@ -21,7 +21,7 @@ app.post("/chat", (req, res) => {
   axios
     .post("http://localhost:11434/api/chat", {
       model: "atate",
-      messages: history,
+      messages: userHistory,
       stream: false,
     })
     .then((response) => {
