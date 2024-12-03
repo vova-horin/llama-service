@@ -80,6 +80,7 @@
       const loadingElement = document.getElementById("loading");
       const messageInput = document.getElementById("messageInput");
       const sendButton = document.getElementById("sendButton");
+      const userId = Date.now().toString();
 
       let isLoading = false;
 
@@ -116,7 +117,7 @@
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify({ message }),
+            body: JSON.stringify({ message, id: userId }),
           });
           const data = await response.json();
 

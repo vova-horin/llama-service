@@ -6,20 +6,29 @@ app.use(express.static("./public"));
 
 app.use(express.json());
 
+const history = {};
+
 app.post("/chat", (req, res) => {
   console.log(req.body.message);
+
+  const userHistory = history[req.body.id] ? history[req.body.id] : [];
+
+  userHistory.push({
+    role: "user",
+    content: req.body.message,
+  });
+
   axios
     .post("http://localhost:11434/api/chat", {
       model: "atate",
-      messages: [
-        {
-          role: "user",
-          content: req.body.message,
-        },
-      ],
+      messages: history,
       stream: false,
     })
     .then((response) => {
+      userHistory.push(response.data.message);
+
+      history[req.body.id] = userHistory;
+
       res.send(response.data);
     })
     .catch((error) => {
