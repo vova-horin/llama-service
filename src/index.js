@@ -1,11 +1,30 @@
 const express = require("express");
 const app = express();
-const port = 3000;
+const axios = require("axios");
 
-app.get("/", (req, res) => {
-  res.send("Hello World!");
+app.use(express.static("./public"));
+
+app.get("/chat", (req, res) => {
+  axios
+    .post("http://localhost:11434/api/chat", {
+      model: "atate",
+      messages: [
+        {
+          role: "user",
+          content: req.query.message,
+        },
+      ],
+      stream: false,
+    })
+    .then((response) => {
+      res.send(response.data);
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+    });
 });
 
+const port = 80;
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
+  console.log(`app listening on port ${port}`);
 });
