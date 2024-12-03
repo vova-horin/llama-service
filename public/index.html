@@ -3,9 +3,137 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>Andrew Tate Chat</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+      }
+
+      .chat-container {
+        max-width: 600px;
+        margin: 0 auto;
+        border: 1px solid #ccc;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        height: 400px;
+        justify-content: space-between;
+      }
+
+      .messages {
+        flex-grow: 1;
+        overflow-y: auto;
+        margin-bottom: 20px;
+        border-bottom: 1px solid #ccc;
+        padding-bottom: 10px;
+      }
+
+      .message {
+        padding: 5px;
+        margin: 5px 0;
+      }
+
+      .loading {
+        text-align: center;
+        font-size: 14px;
+        color: #888;
+      }
+
+      input[type="text"] {
+        width: calc(100% - 100px);
+        padding: 8px;
+        margin-right: 10px;
+        box-sizing: border-box;
+      }
+
+      button {
+        padding: 8px;
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        cursor: pointer;
+      }
+
+      button:disabled {
+        background-color: #ccc;
+      }
+    </style>
   </head>
   <body>
-    test
+    <div class="chat-container">
+      <div class="messages" id="messages"></div>
+      <div class="loading" id="loading" style="display: none">Loading...</div>
+      <div>
+        <input type="text" id="messageInput" placeholder="Type your message" />
+        <button id="sendButton" onclick="sendMessage()">Send</button>
+      </div>
+    </div>
+
+    <script>
+      const messagesContainer = document.getElementById("messages");
+      const loadingElement = document.getElementById("loading");
+      const messageInput = document.getElementById("messageInput");
+      const sendButton = document.getElementById("sendButton");
+
+      let isLoading = false;
+
+      function updateMessages(messages) {
+        messagesContainer.innerHTML = messages
+          .map((msg) => `<div class="message">${msg}</div>`)
+          .join("");
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+      }
+
+      async function sendMessage() {
+        const message = messageInput.value.trim();
+        if (!message || isLoading) return;
+
+        // Add user message to history
+        updateMessages([
+          `You: ${message}`,
+          ...messagesContainer.innerHTML
+            .split('<div class="message">')
+            .map((m) => m.replace("</div>", ""))
+            .filter(Boolean),
+        ]);
+        messageInput.value = "";
+
+        // Show loading state
+        isLoading = true;
+        loadingElement.style.display = "block";
+        sendButton.disabled = true;
+
+        try {
+          // Call API
+          const response = await fetch("/chat", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ message }),
+          });
+          const data = await response.json();
+
+          // Update with response message
+          if (data.message) {
+            updateMessages([
+              data.message.content,
+              ...messagesContainer.innerHTML
+                .split('<div class="message">')
+                .map((m) => m.replace("</div>", ""))
+                .filter(Boolean),
+            ]);
+          }
+        } catch (error) {
+          console.error("Error sending message:", error);
+        } finally {
+          // Reset loading state
+          isLoading = false;
+          loadingElement.style.display = "none";
+          sendButton.disabled = false;
+        }
+      }
+    </script>
   </body>
 </html>
