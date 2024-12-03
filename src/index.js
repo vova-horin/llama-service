@@ -20,7 +20,7 @@ app.post("/chat", (req, res) => {
 
   axios
     .post("http://localhost:11434/api/chat", {
-      model: "atate",
+      model: "atate2",
       messages: userHistory,
       stream: false,
     })
