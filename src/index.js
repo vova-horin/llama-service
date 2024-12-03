@@ -20,7 +20,6 @@ app.post("/chat", (req, res) => {
       stream: false,
     })
     .then((response) => {
-      console.log("test", response);
       res.send(response.data);
     })
     .catch((error) => {
