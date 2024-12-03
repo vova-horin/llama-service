@@ -4,15 +4,15 @@ const axios = require("axios");
 
 app.use(express.static("./public"));
 
-app.get("/chat", (req, res) => {
-  console.log(req.query.message);
+app.post("/chat", (req, res) => {
+  console.log(req.body.message);
   axios
     .post("http://localhost:11434/api/chat", {
       model: "atate",
       messages: [
         {
           role: "user",
-          content: req.query.message,
+          content: req.body.message,
         },
       ],
       stream: false,
