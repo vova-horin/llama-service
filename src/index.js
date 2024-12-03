@@ -5,6 +5,7 @@ const axios = require("axios");
 app.use(express.static("./public"));
 
 app.get("/chat", (req, res) => {
+  console.log(req.query.message);
   axios
     .post("http://localhost:11434/api/chat", {
       model: "atate",
@@ -17,6 +18,7 @@ app.get("/chat", (req, res) => {
       stream: false,
     })
     .then((response) => {
+      console.log("test", response);
       res.send(response.data);
     })
     .catch((error) => {
