@@ -97,11 +97,11 @@
 
         // Add user message to history
         updateMessages([
-          `You: ${message}`,
           ...messagesContainer.innerHTML
             .split('<div class="message">')
             .map((m) => m.replace("</div>", ""))
             .filter(Boolean),
+          `You: ${message}`,
         ]);
         messageInput.value = "";
 
