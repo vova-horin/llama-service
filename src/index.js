@@ -27,6 +27,8 @@ app.post("/chat", (req, res) => {
     .then((response) => {
       userHistory.push(response.data.message);
 
+      console.log(response.data.message);
+
       history[req.body.id] = userHistory;
 
       res.send(response.data);
