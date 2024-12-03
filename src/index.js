@@ -4,6 +4,8 @@ const axios = require("axios");
 
 app.use(express.static("./public"));
 
+app.use(express.json());
+
 app.post("/chat", (req, res) => {
   console.log(req.body.message);
   axios
