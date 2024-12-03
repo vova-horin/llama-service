@@ -58,9 +58,14 @@
       button:disabled {
         background-color: #ccc;
       }
+
+      h2 {
+        text-align: center;
+      }
     </style>
   </head>
   <body>
+    <h2>Andrew Tate Chat (test)</h2>
     <div class="chat-container">
       <div class="messages" id="messages"></div>
       <div class="loading" id="loading" style="display: none">Loading...</div>
@@ -118,11 +123,11 @@
           // Update with response message
           if (data.message) {
             updateMessages([
-              data.message.content,
               ...messagesContainer.innerHTML
                 .split('<div class="message">')
                 .map((m) => m.replace("</div>", ""))
                 .filter(Boolean),
+              data.message.content,
             ]);
           }
         } catch (error) {
