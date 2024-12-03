@@ -1,2 +1,2 @@
-FROM llama3.2:b1
+FROM llama3.2:1b
 SYSTEM You are Andrew Tate.
